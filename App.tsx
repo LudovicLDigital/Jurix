@@ -1,118 +1,65 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, {useCallback} from 'react';
+import {Image} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import HomeScreen from './src/screens/HomeScreen.tsx';
+import AccountScreen from './src/screens/AccountScreen.tsx';
+import ExercicesScreen from './src/screens/ExercicesScreen.tsx';
+import {COLORS, ROUTES} from './src/utils/constants.ts';
+import Icons from './src/assets/icons';
+import Header from './src/navigation/header.tsx';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+const Tab = createBottomTabNavigator();
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const renderIcon = useCallback((name: string, focused: boolean) => {
+    let icon;
+    switch (name) {
+      case ROUTES.EXERCISES:
+        icon = Icons.exercises;
+        break;
+      case ROUTES.ACCOUNT:
+        icon = Icons.account;
+        break;
+      default:
+        icon = Icons.home;
+        break;
+    }
+    return (
+      <Image
+        source={icon}
+        tintColor={focused ? COLORS.PRIMARY : COLORS.SECONDARY}
+        style={{width: 20, height: 20}}
+      />
+    );
+  }, []);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          tabBarIcon: ({focused}) => renderIcon(route.name, focused),
+          tabBarActiveTintColor: COLORS.PRIMARY,
+          tabBarInactiveTintColor: COLORS.SECONDARY,
+          tabBarStyle: {
+            backgroundColor: COLORS.MENUS,
+            paddingBottom: 10,
+            height: '10%',
+          },
+          tabBarLabelStyle: {
+            fontSize: 12, // Set font size of labels if needed
+            paddingBottom: 10,
+          },
+          headerShown: true,
+          header: () => <Header />,
+        })}
+        initialRouteName={ROUTES.HOME}>
+        <Tab.Screen name={ROUTES.HOME} component={HomeScreen} />
+        <Tab.Screen name={ROUTES.EXERCISES} component={ExercicesScreen} />
+        <Tab.Screen name={ROUTES.ACCOUNT} component={AccountScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
