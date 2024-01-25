@@ -34,6 +34,10 @@ function App(): React.JSX.Element {
     );
   }, []);
 
+  const renderHeader = useCallback(() => {
+    return <Header />;
+  }, []);
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -51,7 +55,7 @@ function App(): React.JSX.Element {
             paddingBottom: 10,
           },
           headerShown: true,
-          header: () => <Header />,
+          header: renderHeader,
         })}
         initialRouteName={ROUTES.HOME}>
         <Tab.Screen name={ROUTES.HOME} component={HomeScreen} />

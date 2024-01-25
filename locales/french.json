@@ -1,0 +1,10 @@
+{
+  "homeScreen": {
+    "pitch": "Jurix, l'association de jury de compétition de CrossFit, incarne l'équité et l'excellence dans l'arène du fitness fonctionnel. Notre équipe, composée de professionnels aguerris, veille à la réglementation stricte et à l'application impartial des normes lors de chaque événement. En tant que gardiens de l'intégrité sportive, nous contribuons à créer un environnement compétitif sain où chaque athlète a la possibilité de briller à travers son dévouement et sa performance. Notre mission ne se limite pas à la supervision des compétitions, mais s'étend à la formation continue de nos membres, assurant ainsi une expertise et une qualité d'arbitrage inégalées. Avec Jurix, chaque mouvement compte, chaque effort est reconnu, et la quête de la perfection sportive est honorée. Rejoignez-nous dans cette aventure où l'équité rencontre la performance, et où chaque compétition est une célébration de la force humaine et de l'esprit sportif."
+  },
+  "tabs": {
+    "home": "Accueil",
+    "exercises": "Exercices",
+    "account": "Compte"
+  }
+}

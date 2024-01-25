@@ -11,7 +11,6 @@ const BackgroundContainer = ({children}: {children: React.ReactNode}) => {
         width: '100%',
         position: 'absolute',
         top: '-10%',
-        opacity: 0.7,
       }}>
       {children}
     </ImageBackground>

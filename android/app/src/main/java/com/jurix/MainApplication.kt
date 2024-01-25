@@ -1,4 +1,4 @@
-package com.jurix
+package com.ldigital.jurix
 
 import android.app.Application
 import com.facebook.react.PackageList

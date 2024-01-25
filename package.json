@@ -3,17 +3,22 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "export JAVA_HOME=`/usr/libexec/java_home -v 17.0.9` && react-native run-android",
+    "android": "export JAVA_HOME=`/usr/libexec/java_home -v 17.0.9` && react-native run-android --appId=com.ldigital.jurix",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-firebase/app": "^18.7.3",
+    "@react-native-firebase/firestore": "^18.8.0",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
+    "i18next": "^23.7.19",
     "react": "18.2.0",
+    "react-i18next": "^14.0.1",
     "react-native": "0.73.2",
+    "react-native-localize": "^3.0.6",
     "react-native-safe-area-context": "^4.8.2",
     "react-native-screens": "^3.29.0",
     "react-native-vector-icons": "^10.0.3"
