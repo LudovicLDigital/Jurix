@@ -26,6 +26,8 @@ if linkage != nil
 end
 
 target 'Jurix' do
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
   config = use_native_modules!
   use_react_native!(
     :path => config[:reactNativePath],
@@ -38,8 +40,6 @@ target 'Jurix' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  use_frameworks! :linkage => :static
-  $RNFirebaseAsStaticFramework = true
 
   target 'JurixTests' do
     inherit! :complete
