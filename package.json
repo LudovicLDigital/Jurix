@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-native-firebase/app": "^18.7.3",
     "@react-native-firebase/firestore": "^18.8.0",
+    "@react-native-firebase/storage": "^18.8.0",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
     "i18next": "^23.7.19",

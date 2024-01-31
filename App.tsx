@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from './src/screens/HomeScreen.tsx';
 import AccountScreen from './src/screens/AccountScreen.tsx';
-import ExercicesScreen from './src/screens/ExercicesScreen.tsx';
+import ExercisesScreen from './src/screens/ExercisesScreen.tsx';
 import {COLORS, ROUTES} from './src/utils/constants.ts';
 import Icons from './src/assets/icons';
 import Header from './src/navigation/header.tsx';
@@ -59,7 +59,7 @@ function App(): React.JSX.Element {
         })}
         initialRouteName={ROUTES.HOME}>
         <Tab.Screen name={ROUTES.HOME} component={HomeScreen} />
-        <Tab.Screen name={ROUTES.EXERCISES} component={ExercicesScreen} />
+        <Tab.Screen name={ROUTES.EXERCISES} component={ExercisesScreen} />
         <Tab.Screen name={ROUTES.ACCOUNT} component={AccountScreen} />
       </Tab.Navigator>
     </NavigationContainer>
