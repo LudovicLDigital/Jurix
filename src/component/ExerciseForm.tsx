@@ -1,62 +1,98 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
-import {Exercise} from '../utils/api/getExercices.ts';
+import {Execution, Exercise} from '../utils/api/getExercices.ts';
+import {Controller, Path, SubmitHandler, useForm} from 'react-hook-form';
 
+interface FormInput {
+  title: string;
+  description: string;
+  videoUrl: string;
+  execution: Execution[];
+  imageUri: string;
+}
+
+type InputProps = {
+  label: string;
+  required?: boolean;
+  formKey: Path<FormInput>;
+  control: any;
+  haveError?: boolean;
+};
+
+const Input = ({label, required, control, formKey, haveError}: InputProps) => {
+  return (
+    <View style={styles.inputContainer}>
+      <Text>{label}</Text>
+      <Controller
+        control={control}
+        name={formKey}
+        rules={{required}}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            style={[styles.input, haveError ? {borderColor: 'red'} : {}]}
+          />
+        )}
+      />
+      {required && <Text style={styles.inputRequired}>{'Requis'}</Text>}
+    </View>
+  );
+};
 type ExerciseFormProps = {
   onSubmit: (exercise: Exercise) => void;
 };
 const ExerciseForm = ({onSubmit}: ExerciseFormProps) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [executionDescription, setExecutionDescription] = useState('');
-  const [executionImage, setExecutionImage] = useState('');
-  const [videoUrl, setVideoUrl] = useState('');
-  const [exercice, setExercice] = useState<Exercise | null>(null);
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<FormInput>({
+    defaultValues: {
+      title: '',
+      description: '',
+      videoUrl: '',
+      execution: [],
+      imageUri: '',
+    },
+  });
 
-  const handleSubmit = () => {
+  const _onSubmit: SubmitHandler<FormInput> = data => {
     const newExercice: Exercise = {
-      title: title,
-      description: description,
-      execution: [{description: executionDescription, image: executionImage}],
+      title: data.title,
+      description: data.description,
+      execution: [],
       id: Math.floor(Math.random() * 10000),
-      videoUrl: videoUrl,
-      titleIdentifier: title.toLowerCase(),
+      videoUrl: data.videoUrl,
+      image: data.imageUri,
+      titleIdentifier: data.title.toLowerCase(),
     };
-    setExercice(newExercice);
     onSubmit(newExercice);
   };
   return (
     <View style={styles.container}>
-      <Text>Titre de l'exercice</Text>
-      <TextInput value={title} onChangeText={setTitle} style={styles.input} />
-      <Text>Description de l'exercice</Text>
-      <TextInput
-        value={description}
-        onChangeText={setDescription}
-        style={styles.input}
+      <Input
+        label={"Titre de l'exercice"}
+        control={control}
+        formKey={'title'}
+        required={true}
+        haveError={!!errors.title}
       />
-      <Text>Description de l'étape 1 d'exécution</Text>
-      <TextInput
-        value={executionDescription}
-        onChangeText={setExecutionDescription}
-        style={styles.input}
+      <Input
+        label={"Description de l'exercice"}
+        control={control}
+        formKey={'description'}
+        required={true}
+        haveError={!!errors.description}
       />
-      <Text>URL de l'image de l'étape 1 d'exécution</Text>
-      <TextInput
-        value={executionImage}
-        onChangeText={setExecutionImage}
-        style={styles.input}
+      <Input
+        label={'URL de la vidéo'}
+        formKey={'videoUrl'}
+        control={control}
+        haveError={!!errors.videoUrl}
       />
-      <Text>URL de la vidéo</Text>
-      <TextInput
-        value={videoUrl}
-        onChangeText={setVideoUrl}
-        style={styles.input}
-      />
-      <Button title="Soumettre" onPress={handleSubmit} />
-      {exercice && (
-        <Text>Exercice soumis ! Vérifiez la console pour les détails.</Text>
-      )}
+      <Button title="Enregistrer" onPress={handleSubmit(_onSubmit)} />
     </View>
   );
 };
@@ -76,5 +112,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
+  },
+  inputRequired: {
+    color: '#fd0000',
+    fontSize: 8,
+    textAlign: 'right',
+    width: '100%',
+    padding: 5,
+    fontWeight: 'bold',
+  },
+  inputContainer: {
+    marginBottom: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    borderRadius: 5,
+    marginVertical: 10,
+    marginHorizontal: 5,
   },
 });

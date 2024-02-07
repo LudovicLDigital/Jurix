@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 
-type Execution = {
+export type Execution = {
   description: string;
   image: string;
 };
@@ -9,6 +9,7 @@ export type Exercise = {
   title: string;
   description: string;
   execution: Execution[];
+  image: string;
   id: number | string;
   videoUrl: string;
   titleIdentifier: string;
