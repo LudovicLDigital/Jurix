@@ -9,8 +9,9 @@ export type Exercise = {
   title: string;
   description: string;
   execution: Execution[];
-  id: number;
+  id: number | string;
   videoUrl: string;
+  titleIdentifier: string;
 };
 
 export const getExercices = async (): Promise<Exercise[]> => {

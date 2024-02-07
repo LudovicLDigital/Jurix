@@ -1,8 +1,22 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
-import {Exercise, getExercices} from '../utils/api/getExercices.ts';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {Exercise} from '../utils/api/getExercices.ts';
 import {getStorageAssets} from '../utils/api/getStorageAssets.ts';
 import BackgroundContainer from '../component/backgroundContainer.tsx';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
+import {COLORS} from '../utils/constants.ts';
+import SearchBar from '../component/SearchBar.tsx';
+
+const EXERCISES_COLLECTION = 'exercises';
 
 type TwoColumnExercises = {
   leftColumn: Exercise;
@@ -17,7 +31,7 @@ const ExerciseItem = ({exercises}: {exercises: TwoColumnExercises}) => {
     const fetchImage = async () => {
       try {
         const uri = await getStorageAssets(
-          `/exercises/${exercises.leftColumn.id}/${exercises.leftColumn.execution[0].image}`,
+          `/${EXERCISES_COLLECTION}/${exercises.leftColumn.id}/${exercises.leftColumn.execution[0].image}`,
         );
         setImageUriLeft(uri);
       } catch (error) {
@@ -27,7 +41,7 @@ const ExerciseItem = ({exercises}: {exercises: TwoColumnExercises}) => {
         try {
           if (exercises.rightColumn) {
             const uri = await getStorageAssets(
-              `/exercises/${exercises.rightColumn.id}/${exercises.rightColumn.execution[0].image}`,
+              `/${EXERCISES_COLLECTION}/${exercises.rightColumn.id}/${exercises.rightColumn.execution[0].image}`,
             );
             setImageUriRight(uri);
           }
@@ -60,35 +74,94 @@ const ExerciseItem = ({exercises}: {exercises: TwoColumnExercises}) => {
 
 const ExercisesScreen = () => {
   const [exercises, setExercices] = useState<TwoColumnExercises[]>([]);
-  useEffect(() => {
-    async function fetchData() {
-      const ex = await getExercices();
+  const [initialExercises, setInitialExercises] = useState<
+    TwoColumnExercises[]
+  >([]);
+  const [loading, setLoading] = useState(true); // Set loading to true on component mount
+
+  const feedExercises = useCallback(
+    (
+      querySnapshot: FirebaseFirestoreTypes.QuerySnapshot<FirebaseFirestoreTypes.DocumentData>,
+      isInitial?: boolean,
+    ) => {
+      const _exercises: Exercise[] = [];
+      querySnapshot.forEach(documentSnapshot => {
+        _exercises.push({
+          id: documentSnapshot.data().id,
+          description: documentSnapshot.data().description,
+          execution: documentSnapshot.data().execution,
+          title: documentSnapshot.data().title,
+          videoUrl: documentSnapshot.data().videoUrl,
+          titleIdentifier: documentSnapshot.data().titleIdentifier,
+        });
+      });
+
       const twoColumnExercices: TwoColumnExercises[] = [];
-      ex.forEach((exercice, index) => {
+      _exercises.forEach((exercice, index) => {
         if (index % 2 === 0) {
           twoColumnExercices.push({
             leftColumn: exercice,
-            rightColumn: ex[index + 1] || undefined,
+            rightColumn: _exercises[index + 1] || undefined,
           });
         }
       });
       setExercices(twoColumnExercices);
-    }
+      if (isInitial) {
+        setInitialExercises(twoColumnExercices);
+      }
+    },
+    [],
+  );
 
-    fetchData();
-  }, []);
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection(EXERCISES_COLLECTION)
+      .onSnapshot(querySnapshot => {
+        feedExercises(querySnapshot, true);
+        setLoading(false);
+      });
+
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+  }, [feedExercises]);
+
+  const runOnSearchQuery = useCallback(
+    (query: string) => {
+      if (query === '') {
+        return;
+      } else if (query.length < 3) {
+        return;
+      } else {
+        firestore()
+          .collection(EXERCISES_COLLECTION)
+          .where('titleIdentifier', '>=', query.toLowerCase())
+          .where('titleIdentifier', '<=', query.toLowerCase() + '\uf8ff')
+          .get()
+          .then(querySnapshot => feedExercises(querySnapshot));
+      }
+    },
+    [feedExercises],
+  );
 
   return (
     <BackgroundContainer>
-      <View style={styles.container}>
-        {exercises && exercises.length > 0 && (
-          <FlatList
-            data={exercises}
-            renderItem={({item}) => <ExerciseItem exercises={item} />}
-            keyExtractor={item => item.leftColumn.id.toString()}
+      {loading ? (
+        <ActivityIndicator size="large" color={COLORS.PRIMARY} />
+      ) : (
+        <View style={styles.container}>
+          <SearchBar
+            onSearch={query => runOnSearchQuery(query)}
+            onClear={() => setExercices(initialExercises)}
           />
-        )}
-      </View>
+          {exercises && exercises.length > 0 && (
+            <FlatList
+              data={exercises}
+              renderItem={({item}) => <ExerciseItem exercises={item} />}
+              keyExtractor={item => item.leftColumn.id.toString()}
+            />
+          )}
+        </View>
+      )}
     </BackgroundContainer>
   );
 };

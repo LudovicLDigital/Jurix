@@ -20,6 +20,7 @@ const ExerciseForm = ({onSubmit}: ExerciseFormProps) => {
       execution: [{description: executionDescription, image: executionImage}],
       id: Math.floor(Math.random() * 10000),
       videoUrl: videoUrl,
+      titleIdentifier: title.toLowerCase(),
     };
     setExercice(newExercice);
     onSubmit(newExercice);
