@@ -31,7 +31,7 @@ const ExerciseItem = ({exercises}: {exercises: TwoColumnExercises}) => {
     const fetchImage = async () => {
       try {
         const uri = await getStorageAssets(
-          `/${EXERCISES_COLLECTION}/${exercises.leftColumn.id}/${exercises.leftColumn.execution[0].image}`,
+          `/${EXERCISES_COLLECTION}/${exercises.leftColumn.id}/${exercises.leftColumn.image}`,
         );
         setImageUriLeft(uri);
       } catch (error) {
@@ -41,7 +41,7 @@ const ExerciseItem = ({exercises}: {exercises: TwoColumnExercises}) => {
         try {
           if (exercises.rightColumn) {
             const uri = await getStorageAssets(
-              `/${EXERCISES_COLLECTION}/${exercises.rightColumn.id}/${exercises.rightColumn.execution[0].image}`,
+              `/${EXERCISES_COLLECTION}/${exercises.rightColumn.id}/${exercises.rightColumn.image}`,
             );
             setImageUriRight(uri);
           }
@@ -93,6 +93,7 @@ const ExercisesScreen = () => {
           title: documentSnapshot.data().title,
           videoUrl: documentSnapshot.data().videoUrl,
           titleIdentifier: documentSnapshot.data().titleIdentifier,
+          image: documentSnapshot.data().image,
         });
       });
 

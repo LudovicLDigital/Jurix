@@ -1,14 +1,23 @@
-import React from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
-import {Execution, Exercise} from '../utils/api/getExercices.ts';
+import React, {useState} from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {Exercise} from '../utils/api/getExercices.ts';
 import {Controller, Path, SubmitHandler, useForm} from 'react-hook-form';
+import ImagePicker from './ImagePicker.tsx';
+import {COLORS} from '../utils/constants.ts';
+import {useTranslation} from 'react-i18next';
+import {uploadImage} from '../utils/api/getStorageAssets.ts';
 
 interface FormInput {
   title: string;
   description: string;
   videoUrl: string;
-  execution: Execution[];
-  imageUri: string;
 }
 
 type InputProps = {
@@ -44,6 +53,8 @@ type ExerciseFormProps = {
   onSubmit: (exercise: Exercise) => void;
 };
 const ExerciseForm = ({onSubmit}: ExerciseFormProps) => {
+  const {t} = useTranslation('createExerciseForm');
+
   const {
     control,
     handleSubmit,
@@ -53,10 +64,9 @@ const ExerciseForm = ({onSubmit}: ExerciseFormProps) => {
       title: '',
       description: '',
       videoUrl: '',
-      execution: [],
-      imageUri: '',
     },
   });
+  const [imageUri, setImageUri] = useState<string>();
 
   const _onSubmit: SubmitHandler<FormInput> = data => {
     const newExercice: Exercise = {
@@ -65,35 +75,45 @@ const ExerciseForm = ({onSubmit}: ExerciseFormProps) => {
       execution: [],
       id: Math.floor(Math.random() * 10000),
       videoUrl: data.videoUrl,
-      image: data.imageUri,
+      image: `${data.title.toLowerCase()}.jpg`,
       titleIdentifier: data.title.toLowerCase(),
     };
+    if (imageUri) {
+      uploadImage(imageUri, newExercice);
+    }
     onSubmit(newExercice);
   };
+
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Input
-        label={"Titre de l'exercice"}
+        label={t('title')}
         control={control}
         formKey={'title'}
         required={true}
         haveError={!!errors.title}
       />
       <Input
-        label={"Description de l'exercice"}
+        label={t('description')}
         control={control}
         formKey={'description'}
         required={true}
         haveError={!!errors.description}
       />
       <Input
-        label={'URL de la vidéo'}
+        label={t('videoUrl')}
         formKey={'videoUrl'}
         control={control}
         haveError={!!errors.videoUrl}
       />
-      <Button title="Enregistrer" onPress={handleSubmit(_onSubmit)} />
-    </View>
+      <ImagePicker
+        onChooseFile={path => setImageUri(path)}
+        placeholder={t('chooseMainImage')}
+      />
+      <TouchableOpacity onPress={handleSubmit(_onSubmit)} style={styles.submit}>
+        <Text style={{color: COLORS.MENUS}}>{t('submit')}</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
@@ -101,7 +121,6 @@ export default ExerciseForm;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
@@ -129,5 +148,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginVertical: 10,
     marginHorizontal: 5,
+  },
+  submit: {
+    marginVertical: 20,
+    backgroundColor: COLORS.PRIMARY,
+    padding: 10,
   },
 });

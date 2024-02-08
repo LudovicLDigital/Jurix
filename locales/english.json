@@ -6,5 +6,16 @@
     "home": "Home",
     "exercises": "Exercises",
     "account": "Account"
+  },
+  "createExerciseForm": {
+    "add": "Add a exercise",
+    "submit": "Save",
+    "chooseMainImage": "Choose a main image",
+    "videoUrl": "Video URL",
+    "description": "Exercise description",
+    "title": "Exercise title",
+    "fromCamera": "From camera",
+    "fromGallery": "From gallery",
+    "alertTitle": "Choose an image"
   }
 }

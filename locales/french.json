@@ -6,5 +6,16 @@
     "home": "Accueil",
     "exercises": "Exercices",
     "account": "Compte"
+  },
+  "createExerciseForm": {
+    "add": "Ajouter un exercice",
+    "submit": "Enregistrer",
+    "chooseMainImage": "Choisir l'image principale",
+    "videoUrl": "URL de la vidéo",
+    "description": "Description de l'exercice",
+    "title": "Titre de l'exercice",
+    "fromCamera": "Depuis la caméra",
+    "fromGallery": "Depuis la galerie",
+    "alertTitle": "Choisir une image"
   }
 }
