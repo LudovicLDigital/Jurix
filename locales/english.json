@@ -1,4 +1,11 @@
 {
+  "app": {
+    "tab": {
+      "home": "Home",
+      "exercises": "Exercises",
+      "account": "Account"
+    }
+  },
   "homeScreen": {
     "pitch": "Jurix, CrossFit's competitive judging association, embodies fairness and excellence in the functional fitness arena. Our team, made up of seasoned professionals, ensures strict regulations and the impartial application of standards during each event. As guardians of sporting integrity, we help create a healthy competitive environment where every athlete has the opportunity to shine through dedication and performance. Our mission is not limited to the supervision of competitions, but extends to the continuing education of our members, thus ensuring unrivaled expertise and refereeing quality. With Jurix, every movement counts, every effort is recognized, and the quest for sporting perfection is honored. Join us in this adventure where fairness meets performance, and where each competition is a celebration of human strength and sportsmanship."
   },

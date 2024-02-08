@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -85,35 +87,42 @@ const ExerciseForm = ({onSubmit}: ExerciseFormProps) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Input
-        label={t('title')}
-        control={control}
-        formKey={'title'}
-        required={true}
-        haveError={!!errors.title}
-      />
-      <Input
-        label={t('description')}
-        control={control}
-        formKey={'description'}
-        required={true}
-        haveError={!!errors.description}
-      />
-      <Input
-        label={t('videoUrl')}
-        formKey={'videoUrl'}
-        control={control}
-        haveError={!!errors.videoUrl}
-      />
-      <ImagePicker
-        onChooseFile={path => setImageUri(path)}
-        placeholder={t('chooseMainImage')}
-      />
-      <TouchableOpacity onPress={handleSubmit(_onSubmit)} style={styles.submit}>
-        <Text style={{color: COLORS.MENUS}}>{t('submit')}</Text>
-      </TouchableOpacity>
-    </ScrollView>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <Input
+          label={t('title')}
+          control={control}
+          formKey={'title'}
+          required={true}
+          haveError={!!errors.title}
+        />
+        <Input
+          label={t('description')}
+          control={control}
+          formKey={'description'}
+          required={true}
+          haveError={!!errors.description}
+        />
+        <Input
+          label={t('videoUrl')}
+          formKey={'videoUrl'}
+          control={control}
+          haveError={!!errors.videoUrl}
+        />
+        <ImagePicker
+          onChooseFile={path => setImageUri(path)}
+          placeholder={t('chooseMainImage')}
+        />
+        <TouchableOpacity
+          onPress={handleSubmit(_onSubmit)}
+          style={styles.submit}>
+          <Text style={{color: COLORS.MENUS}}>{t('submit')}</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -121,8 +130,12 @@ export default ExerciseForm;
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    flex: 1,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
   },
   input: {

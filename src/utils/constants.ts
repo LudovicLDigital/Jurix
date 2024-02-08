@@ -2,6 +2,8 @@ export enum ROUTES {
   HOME = 'home',
   EXERCISES = 'exercises',
   ACCOUNT = 'account',
+  EXERCISE_LIST = 'exerciseList',
+  EXERCISE_DETAIL = 'exerciseDetail',
 }
 
 export enum COLORS {

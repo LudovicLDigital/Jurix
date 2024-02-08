@@ -1824,6 +1824,10 @@ PODS:
     - Firebase/Storage (= 10.19.0)
     - React-Core
     - RNFBApp
+  - RNGestureHandler (2.15.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - RNLocalize (3.0.6):
     - React-Core
   - RNScreens (3.29.0):
@@ -1893,6 +1897,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -2029,6 +2034,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/firestore"
   RNFBStorage:
     :path: "../node_modules/@react-native-firebase/storage"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
   RNLocalize:
     :path: "../node_modules/react-native-localize"
   RNScreens:
@@ -2112,6 +2119,7 @@ SPEC CHECKSUMS:
   RNFBApp: 5ee688b07ed0fa692a3a8fd07df6d6ae41e4c3a0
   RNFBFirestore: 91d4af5a7170adcd24fdc542bb155f1f0724fe11
   RNFBStorage: a0bf81dd1e632b7be94bd6aae50063d3890a1b15
+  RNGestureHandler: 7feb85c5a30ebbcd4d5c7a851ba9e7eafb9860cb
   RNLocalize: 4222a3756cdbe2dc9a5bdf445765a4d2572107cb
   RNScreens: 2b73f5eb2ac5d94fbd61fa4be0bfebd345716825
   RNVectorIcons: ee070291bc6c7b4c880181b214534d4657ea1905

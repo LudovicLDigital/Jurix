@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {Exercise} from '../utils/api/getExercices.ts';
@@ -13,7 +14,7 @@ import BackgroundContainer from '../component/backgroundContainer.tsx';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
-import {COLORS} from '../utils/constants.ts';
+import {COLORS, ROUTES} from '../utils/constants.ts';
 import SearchBar from '../component/SearchBar.tsx';
 
 const EXERCISES_COLLECTION = 'exercises';
@@ -23,7 +24,13 @@ type TwoColumnExercises = {
   rightColumn?: Exercise;
 };
 
-const ExerciseItem = ({exercises}: {exercises: TwoColumnExercises}) => {
+const ExerciseItem = ({
+  exercises,
+  navigation,
+}: {
+  exercises: TwoColumnExercises;
+  navigation: any;
+}) => {
   const [imageUriLeft, setImageUriLeft] = useState<string>();
   const [imageUriRight, setImageUriRight] = useState<string>();
 
@@ -54,14 +61,23 @@ const ExerciseItem = ({exercises}: {exercises: TwoColumnExercises}) => {
     fetchImage();
   }, [exercises]);
 
-  const renderExercice = useCallback((exercise: Exercise, image?: string) => {
-    return (
-      <View style={styles.cardContainer}>
-        {image && <Image source={{uri: image}} style={styles.imageStyle} />}
-        <Text style={styles.textStyle}>{exercise.title}</Text>
-      </View>
-    );
-  }, []);
+  const renderExercice = useCallback(
+    (exercise: Exercise, image?: string) => {
+      return (
+        <TouchableOpacity
+          style={styles.cardContainer}
+          onPress={() =>
+            navigation.navigate(ROUTES.EXERCISE_DETAIL, {exercise: exercise})
+          }>
+          <>
+            {image && <Image source={{uri: image}} style={styles.imageStyle} />}
+            <Text style={styles.textStyle}>{exercise.title}</Text>
+          </>
+        </TouchableOpacity>
+      );
+    },
+    [navigation],
+  );
 
   return (
     <View style={styles.rowContainer}>
@@ -72,7 +88,7 @@ const ExerciseItem = ({exercises}: {exercises: TwoColumnExercises}) => {
   );
 };
 
-const ExercisesScreen = () => {
+const ExercisesScreen = ({navigation}: {navigation: any}) => {
   const [exercises, setExercices] = useState<TwoColumnExercises[]>([]);
   const [initialExercises, setInitialExercises] = useState<
     TwoColumnExercises[]
@@ -157,7 +173,9 @@ const ExercisesScreen = () => {
           {exercises && exercises.length > 0 && (
             <FlatList
               data={exercises}
-              renderItem={({item}) => <ExerciseItem exercises={item} />}
+              renderItem={({item}) => (
+                <ExerciseItem exercises={item} navigation={navigation} />
+              )}
               keyExtractor={item => item.leftColumn.id.toString()}
             />
           )}
