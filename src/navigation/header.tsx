@@ -1,13 +1,18 @@
 // Header.tsx
 import React from 'react';
-import {Image, SafeAreaView, StyleSheet} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import Images from '../assets/images';
 import {COLORS} from '../utils/constants.ts';
+import FastImage from 'react-native-fast-image';
 
 const Header = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Image source={Images.logo} style={styles.logo} />
+      <FastImage
+        source={Images.logo}
+        style={styles.logo}
+        resizeMode={FastImage.resizeMode.contain}
+      />
     </SafeAreaView>
   );
 };
@@ -19,13 +24,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
   },
   logo: {
     width: 100,
     height: 50,
-    resizeMode: 'contain',
+    marginBottom: 10,
   },
 });
 

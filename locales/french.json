@@ -24,5 +24,11 @@
     "fromCamera": "Depuis la caméra",
     "fromGallery": "Depuis la galerie",
     "alertTitle": "Choisir une image"
+  },
+  "exerciseDetails": {
+    "back": "Retour",
+    "description": "Description",
+    "video": "Exécution en vidéo",
+    "step": "Étape {{index}}"
   }
 }
