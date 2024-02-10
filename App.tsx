@@ -12,6 +12,8 @@ import Icons from './src/assets/icons';
 import Header from './src/navigation/header.tsx';
 import ExerciseDetailScreen from './src/screens/ExerciseDetailScreen.tsx';
 import {useTranslation} from 'react-i18next';
+import {AuthProvider} from './src/contexts/AuthContext.tsx';
+import Toast from 'react-native-toast-message';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -33,6 +35,7 @@ function ExerciseStack() {
 
 function App(): React.JSX.Element {
   const {t} = useTranslation('app');
+
   const renderIcon = useCallback((name: string, focused: boolean) => {
     let icon;
     switch (name) {
@@ -60,32 +63,35 @@ function App(): React.JSX.Element {
   }, []);
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({route}) => ({
-          tabBarIcon: ({focused}) => renderIcon(route.name, focused),
-          tabBarActiveTintColor: COLORS.PRIMARY,
-          tabBarInactiveTintColor: COLORS.SECONDARY,
-          tabBarStyle: {
-            backgroundColor: COLORS.MENUS,
-            paddingBottom: 10,
-            paddingTop: 15,
-            height: '13%',
-          },
-          tabBarLabelStyle: {
-            fontSize: 12, // Set font size of labels if needed
-            paddingBottom: 10,
-          },
-          tabBarLabel: t(`tab.${route.name}`),
-          headerShown: true,
-          header: renderHeader,
-        })}
-        initialRouteName={ROUTES.HOME}>
-        <Tab.Screen name={ROUTES.HOME} component={HomeScreen} />
-        <Tab.Screen name={ROUTES.EXERCISES} component={ExerciseStack} />
-        <Tab.Screen name={ROUTES.ACCOUNT} component={AccountScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <AuthProvider>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({route}) => ({
+            tabBarIcon: ({focused}) => renderIcon(route.name, focused),
+            tabBarActiveTintColor: COLORS.PRIMARY,
+            tabBarInactiveTintColor: COLORS.SECONDARY,
+            tabBarStyle: {
+              backgroundColor: COLORS.MENUS,
+              paddingBottom: 10,
+              paddingTop: 15,
+              height: '13%',
+            },
+            tabBarLabelStyle: {
+              fontSize: 12, // Set font size of labels if needed
+              paddingBottom: 10,
+            },
+            tabBarLabel: t(`tab.${route.name}`),
+            headerShown: true,
+            header: renderHeader,
+          })}
+          initialRouteName={ROUTES.HOME}>
+          <Tab.Screen name={ROUTES.HOME} component={HomeScreen} />
+          <Tab.Screen name={ROUTES.EXERCISES} component={ExerciseStack} />
+          <Tab.Screen name={ROUTES.ACCOUNT} component={AccountScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+      <Toast />
+    </AuthProvider>
   );
 }
 

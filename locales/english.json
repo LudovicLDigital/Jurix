@@ -30,5 +30,12 @@
     "description": "Description",
     "video": "Execution video",
     "step": "Step {{index}}"
+  },
+  "accountScreen": {
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password"
   }
 }

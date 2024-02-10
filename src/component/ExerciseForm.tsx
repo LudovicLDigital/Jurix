@@ -5,16 +5,15 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
-  View,
 } from 'react-native';
 import {Exercise} from '../utils/api/getExercices.ts';
-import {Controller, Path, SubmitHandler, useForm} from 'react-hook-form';
+import {SubmitHandler, useForm} from 'react-hook-form';
 import ImagePicker from './ImagePicker.tsx';
 import {COLORS} from '../utils/constants.ts';
 import {useTranslation} from 'react-i18next';
 import {uploadImage} from '../utils/api/getStorageAssets.ts';
+import {Input} from './Input.tsx';
 
 interface FormInput {
   title: string;
@@ -22,35 +21,6 @@ interface FormInput {
   videoUrl: string;
 }
 
-type InputProps = {
-  label: string;
-  required?: boolean;
-  formKey: Path<FormInput>;
-  control: any;
-  haveError?: boolean;
-};
-
-const Input = ({label, required, control, formKey, haveError}: InputProps) => {
-  return (
-    <View style={styles.inputContainer}>
-      <Text>{label}</Text>
-      <Controller
-        control={control}
-        name={formKey}
-        rules={{required}}
-        render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            style={[styles.input, haveError ? {borderColor: 'red'} : {}]}
-          />
-        )}
-      />
-      {required && <Text style={styles.inputRequired}>{'Requis'}</Text>}
-    </View>
-  );
-};
 type ExerciseFormProps = {
   onSubmit: (exercise: Exercise) => void;
 };
